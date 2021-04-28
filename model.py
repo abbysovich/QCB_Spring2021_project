@@ -17,9 +17,18 @@ class Model:
     def __init__(self):
         # TODO initialize with more friendly state vectors?
         self.circuit = qiskit.QuantumCircuit(2, 2)
-        self.state1 = self.circuit.initialize(qiskit.quantum_info.random_statevector(2).data, 0)
-        self.state2 = self.circuit.initialize(qiskit.quantum_info.random_statevector(2).data, 1)
+        #self.state1 = self.circuit.initialize(qiskit.quantum_info.random_statevector(2).data, 0)
+        #self.state2 = self.circuit.initialize(qiskit.quantum_info.random_statevector(2).data, 1)
+        self.state1, self.state2 = self.initialization([n for n in range(11)])
         self.add_circuit = qiskit.QuantumCircuit(2)
+
+    def initialization(self, possible_states):
+        indices = np.random.randint(0, len(possible_states)-1, 4)
+        a1, a2 = 1/np.sqrt(indices[0]**2+indices[1]**2), 1/np.sqrt(indices[2]**2+indices[3]**2)
+        vec1, vec2 = [indices[0], indices[1]], [indices[2], indices[3]]
+        state1 = self.circuit.initialize([i*a1 for i in vec1], 0)
+        state2 = self.circuit.initialize([i*a2 for i in vec2], 1)
+        return state1, state2
 
     # Measure qubits and return state with max probability: ex. [0,1]
     def measureState(self):
@@ -62,6 +71,8 @@ class Model:
         elif name == "Z" or name == "z":
             self.circuit.z(qubit_no)
             self.add_circuit.z(qubit_no)
+        else:
+            pass
 
         #self.circuit += self.add_circuit
 

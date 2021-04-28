@@ -13,15 +13,15 @@ class View:
 
     def display_initial_message(self, username):
             self.display_board()
-            time.sleep(3)
+            #time.sleep(3)
             print("Whacker : " + username)
-            time.sleep(3)
+            #time.sleep(3)
             print("\nThere's a mole out there...")
-            time.sleep(3)
+            #time.sleep(3)
             print("It exists here, there and everywhere ... at once")
-            time.sleep(3)
+            #time.sleep(3)
             print("We bestow upon you the Quantum Hammer!!!")
-            time.sleep(3)
+            #time.sleep(3)
             print("Use it and end the terror of the Quantum-mole!")
 
     def accept_move(self):
@@ -31,9 +31,9 @@ class View:
     def final_message(self, username, win):
         if win:
             print("Wow ...")
-            time.sleep(3)
+            #time.sleep(3)
             print("The Quantum-Mole is really gone ...")
-            time.sleep(3)
+            #time.sleep(3)
             print("You did it " + username)
             print("Congratulations!!!")
 
@@ -43,9 +43,9 @@ class View:
 
     def display_quantum_message(self, hint, hole):
         print("New Information!!!")
-        time.sleep(3)
+        #time.sleep(3)
         print("Probability amplitude of mole being in hole " + hole + " is ", hint)
-        time.sleep(3)
+        #time.sleep(3)
 
     def display_board(self):
         print(View.BOARD_STRING)

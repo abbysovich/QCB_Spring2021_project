@@ -44,7 +44,8 @@ def translate_hole(hole):
 
 def quantum_smash(model, hole):
     #hint is a number or a complex number
-    hint = model.getProbabilityOf(translate_hole(hole))
+    prob = model.getProbabilityOf(translate_hole(hole))
+    hint = f"{'{0.real:.3f} + {0.imag:.3f}i'.format(prob)} \nProbability: {round(abs(prob)**2, 3)}"
     view.display_quantum_message(hint, hole)
     gate_details = view.accept_quantum_gate()
 
