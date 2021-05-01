@@ -17,9 +17,9 @@ class Model:
     def __init__(self):
         # TODO initialize with more friendly state vectors?
         self.circuit = qiskit.QuantumCircuit(2, 2)
-        #self.state1 = self.circuit.initialize(qiskit.quantum_info.random_statevector(2).data, 0)
-        #self.state2 = self.circuit.initialize(qiskit.quantum_info.random_statevector(2).data, 1)
-        self.state1, self.state2 = self.initialization([n for n in range(11)])
+        self.state1 = self.circuit.initialize(qiskit.quantum_info.random_statevector(2).data, 0)
+        self.state2 = self.circuit.initialize(qiskit.quantum_info.random_statevector(2).data, 1)
+        #self.state1, self.state2 = self.initialization([n for n in range(11)])
         self.add_circuit = qiskit.QuantumCircuit(2)
 
     def initialization(self, possible_states):
@@ -28,12 +28,14 @@ class Model:
         vec1, vec2 = [indices[0], indices[1]], [indices[2], indices[3]]
         state1 = self.circuit.initialize([i*a1 for i in vec1], 0)
         state2 = self.circuit.initialize([i*a2 for i in vec2], 1)
+        #state1 = self.circuit.initialize([1,0], 0)
+        #state2 = self.circuit.initialize([1,0], 1)
         return state1, state2
 
     # Measure qubits and return state with max probability: ex. [0,1]
     def measureState(self):
         self.circuit.measure([0, 1], [0, 1])
-        job = qiskit.execute(self.circuit, self.simulator, shots=1000)  # 1 shot to keep it luck dependent?
+        job = qiskit.execute(self.circuit, self.simulator, shots=1)  # 1 shot to keep it luck dependent?
         result = job.result()
         count = result.get_counts()
         # max_value = max(result.values())
@@ -41,7 +43,9 @@ class Model:
         count = list(sorted(count.items(), key=lambda item: item[1], reverse=True))
         high = count[0][0]
         index = len(high)-1
-        return [int(high[index]), int(high[index-1])]
+        result = [int(high[index]), int(high[index-1])]
+        #print(result)
+        return result
 
     # Return a probability coefficient of specific state
     # state is an array of size 2 which contains 0 or 1
@@ -57,8 +61,10 @@ class Model:
             return out_state[1]
         elif state == [1, 0]:
             return out_state[2]
-        else:
+        elif state == [1, 1]:
             return out_state[3]
+        else:
+            assert False, 'bug!!'
 
     # Add a gate to the end of the circuit (at specified qubit)
     def add_unitary(self, name, qubit_no):
