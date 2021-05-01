@@ -32,13 +32,16 @@ class Model:
 
     # Measure qubits and return state with max probability: ex. [0,1]
     def measureState(self):
-        self.circuit.measure([0, 1], [1, 0])
-        job = qiskit.execute(self.circuit, self.simulator, shots=1)  # 1 shot to keep it luck dependent?
+        self.circuit.measure([0, 1], [0, 1])
+        job = qiskit.execute(self.circuit, self.simulator, shots=1000)  # 1 shot to keep it luck dependent?
         result = job.result()
         count = result.get_counts()
         # max_value = max(result.values())
         # return [k for k,v in count.items() if v==1][0]
-        return [int(list(count)[0][0]), int(list(count)[0][1])]
+        count = list(sorted(count.items(), key=lambda item: item[1], reverse=True))
+        high = count[0][0]
+        index = len(high)-1
+        return [int(high[index]), int(high[index-1])]
 
     # Return a probability coefficient of specific state
     # state is an array of size 2 which contains 0 or 1
@@ -71,8 +74,9 @@ class Model:
         elif name == "Z" or name == "z":
             self.circuit.z(qubit_no)
             self.add_circuit.z(qubit_no)
-        else:
-            pass
+        elif name == "I" or name == "i":
+            self.circuit.id(qubit_no)
+            self.add_circuit.id(qubit_no)
 
         #self.circuit += self.add_circuit
 
